@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container col-sm-12">
+    <div class="float-end">
+        <br>
+        <a type="button" class="btn btn-dark btn-sm" href="{% url 'login' %}">Logout</a>
+    </div>
+    <div class="text-center">
+        <br><br><br>
+        <h3>Welcome, {{ user.username }}</h3>
+        {% if user.is_staff %}
+        <div class="text-center"><p>Logged in as Admin</p></div>
+        {% endif %}
+    </div>
+
+    {% if user.is_staff %}
+    <div class="float-end">
+        <a type="button" class="btn btn-primary btn-sm" href="{% url 'admin:index' %}">Admin Page</a>
+    </div>
+    {% endif %}
+
+    {% if user.is_staff %}
+    <!-- Admin Section -->
+    <br><br>
+    <h5>Users and their Borrowed Books:</h5>
+    <br>    
+    <ul>
+        {% if users %}
+        <table class="table table-bordered table-responsive shadow">
+            <thead class="bg-warning">
+                <th>Username</th>
+                <th>Books Borrowed</th>
+                <th>Due Date</th>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    {% if not user.is_staff %}
+                        <tr>
+                            <td rowspan="{{ user.bookinstance_set.count }}"><a href="{% url 'user' user.id %}" style="text-decoration: none;">
+                                {{ user.username }}</a>
+                            </td>
+                            {% for book_instance in user.bookinstance_set.all %}
+                                <td>{{ book_instance.book.title }}</td>
+                                <td {% if book_instance.is_due_date_expired %}class="text-danger"{% endif %}>{{ book_instance.due_date }}</td>
+                            </tr>
+                            {% if not forloop.last %}
+                                <tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% else %}
+        <p>No users found.</p>
+        {% endif %}
+    </ul>
+    {% endif %}
+
+    {% if not user.is_staff %}
+    <!-- Non-Admin User Section -->
+    <br><br><h4>Your Books:</h4>
+    {% if borrowed_books %}
+    <ul>
+        <table class="table table-bordered table-hover shadow">
+            <thead class="bg-primary">
+                <th>Books</th>
+                <th>Due Date</th>
+            </thead>
+            {% for book in borrowed_books %}
+            <tbody>
+                <td>{{ book.book.title }}</td>
+                <td {% if book.is_due_date_expired %}class="text-danger"{% endif %}> {{ book.due_date }}</td>
+            </tbody>
+            {% endfor %}
+        </table>
+    </ul>
+    {% else %}
+    <p>You have not borrowed any books yet.</p>
+    {% endif %}
+
+    <br><br><br>
+    <a href="{% url 'books' %}" class="btn btn-primary btn-sm">Explore More Books</a>
+    {% endif %}
+</div>
+
+{% endblock %}

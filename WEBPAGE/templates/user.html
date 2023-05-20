@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container ">
+   <div class="text-center">
+       <br><br><br> <h3>{{ user.username }}</h3>
+   </div>
+
+   <br><br><h5>Books:</h5>
+{% for book_instance in book_instances %}
+    <br><h5><li>{{ book_instance.book.title }}</li></h5>
+    <ul>
+         <li>
+            Due Date:<span {% if book_instance.is_due_date_expired %}class="text-danger"{% endif %}>
+                        {{ book_instance.due_date }}
+                    </span> 
+                    <span>&nbsp;&nbsp;&nbsp; 
+                        {% if book_instance.is_due_date_expired %}
+                        <form action="{% url 'user' book_instance.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Extend date</button>
+                        </form>
+                        {% endif %}
+                    </span>
+                     
+                     
+        </li><br>
+    </ul>
+    
+{% endfor %}
+<br><br><a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-sm">Back to Dashboard</a>
+
+</div>
+
+{% endblock %}

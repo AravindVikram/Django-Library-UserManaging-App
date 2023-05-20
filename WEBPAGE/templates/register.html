@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+
+    <form method="post">
+      {% csrf_token %}
+      <br><br><h3>Create a New Account</h3><br>
+
+      <div class="form-group">
+        <label for="">Enter your Username</label>
+        <input type="text" class="form-control" id="username" name="username"  placeholder="Enter username">
+      </div><br>
+      <div class="form-group">
+        <label for="">Enter your Email</label>
+        <input type="email" class="form-control" id="username" name="email"  placeholder="abc@gmail.com">
+      </div><br>
+      <div class="form-group">
+        <label for="">Enter new Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password" name="password1">
+      </div><br>
+      <div class="form-group">
+        <label for="">Confirm Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password Confirmation" name="password2">
+      </div><br>
+      <div class="text-center">
+        <button type="submit" class="btn btn-info">Register</button>
+      </div>
+    </form>
+
+    <div>
+      {% for message in messages %}
+       <p style="color: red;">{{message}}</p>
+      {% endfor %}
+    </div>
+
+    <br><p>Already registed user?</p>
+    <a href="{% url 'login' %}">
+      <button type="button" class="btn btn-sm btn-primary ">Login</button></a>
+  </div>
+
+{% endblock %}

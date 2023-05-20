@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="text-center">
+        <br><br><br><h2>Books Available</h2>
+    </div>
+    <div class="float-start">
+        <a type="button" class="btn btn-outline-danger btn-sm" href="{% url 'dashboard' %}">Back</a>
+    </div>
+    <br><br><table class="table table-hover table-bordered shadow text-center">
+        <thead class="bg-success">
+            <th>Sl No.</th>
+            <th>Book</th>
+            <th>Author</th>
+            <!-- <th>Action</th> -->
+        </thead>
+        {% for book in books %}
+        <tbody>
+            <td>{{book.id}}</td>
+            <td>{{book.title}}</td>
+            <td>{{book.author}}</td>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
